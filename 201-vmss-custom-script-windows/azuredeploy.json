@@ -94,11 +94,23 @@
               "version": "latest"
             }
           },
-          "osProfile": {
-            "computerNamePrefix": "[parameters('vmssName')]",
-            "adminUsername": "[parameters('adminUsername')]",
-            "adminPassword": "[parameters('adminPassword')]"
-          },
+			"osProfile": {
+				"computerName": "[parameters('vmssName')]",
+				"adminUsername": "[parameters('adminUsername')]",
+				"adminPassword": "[parameters('adminPassword')]",
+				"windowsConfiguration": {
+					"provisionVmAgent": "true",
+					"additionalUnattendContent": [
+              		{
+                		"passName": "oobesystem",
+                		"componentName": "Microsoft-Windows-Shell-Setup",
+                		"settingName": "AutoLogon",
+                		"content": "[concat('<AutoLogon><Password><Value>', parameters('adminPassword'), '</Value><PlainText>true</PlainText></Password><Enabled>true</Enabled><Username>', parameters('adminUsername'), '</Username></AutoLogon>')]"
+              		}
+            ]
+
+				}
+			},
           "networkProfile": {
             "networkInterfaceConfigurations": [
               {
